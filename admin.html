@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shriraam's Comics — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --yellow: #FFD60A; --dark: #1a1a2e; --accent: #e63946;
+      --bg: #f5f4f0; --card: #fff; --border: #1a1a2e;
+      --green: #2ecc71; --shadow: 4px 4px 0 var(--border);
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--dark); }
+    h1, h2, h3 { font-family: 'Bangers', cursive; letter-spacing: 1.5px; }
+
+    /* Header */
+    .admin-header {
+      background: var(--dark); color: #fff;
+      padding: 16px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .admin-header h1 { font-size: 1.6rem; color: var(--yellow); }
+    .admin-header a {
+      background: var(--yellow); color: var(--dark);
+      padding: 8px 18px; border-radius: 8px; border: 2px solid #fff;
+      font-weight: 700; font-size: 0.85rem;
+    }
+
+    /* Layout */
+    .admin-body { max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    /* Section card */
+    .card {
+      background: var(--card); border: 2.5px solid var(--border);
+      border-radius: 14px; padding: 28px; margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-size: 1.4rem; margin-bottom: 20px;
+      padding-bottom: 12px; border-bottom: 2px dashed #ddd;
+    }
+
+    /* Form elements */
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #555; }
+    input[type="text"], textarea, input[type="file"] {
+      width: 100%; padding: 10px 14px;
+      border: 2px solid var(--border); border-radius: 8px;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem;
+      background: var(--bg); margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 22px; border-radius: 8px;
+      font-weight: 700; font-size: 0.9rem;
+      border: 2.5px solid var(--border); cursor: pointer;
+      box-shadow: var(--shadow); transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--border); }
+    .btn-yellow { background: var(--yellow); color: var(--dark); }
+    .btn-green  { background: var(--green);  color: #fff; }
+    .btn-red    { background: var(--accent);  color: #fff; }
+    .btn-white  { background: #fff; color: var(--dark); }
+    .btn-dark   { background: var(--dark); color: #fff; }
+
+    /* Comics list */
+    .comic-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px; background: var(--bg);
+      border: 2px solid #ddd; border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .comic-item img, .comic-thumb-placeholder {
+      width: 64px; height: 64px; object-fit: cover;
+      border-radius: 6px; border: 2px solid var(--border);
+      flex-shrink: 0; background: #e8e6e0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+    }
+    .comic-item-info { flex: 1; }
+    .comic-item-info strong { font-size: 1rem; display: block; }
+    .comic-item-info span { font-size: 0.82rem; color: #888; }
+    .comic-item-actions { display: flex; gap: 8px; }
+
+    /* Image preview */
+    #img-preview-wrap { margin-bottom: 16px; display: none; }
+    #img-preview { max-height: 180px; border-radius: 8px; border: 2px solid var(--border); }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      background: var(--dark); color: #fff;
+      padding: 12px 22px; border-radius: 10px;
+      font-weight: 600; font-size: 0.9rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s; z-index: 999;
+    }
+    .toast.show { opacity: 1; }
+
+    /* Export box */
+    #export-output {
+      font-family: monospace; font-size: 0.78rem;
+      background: #1a1a2e; color: #a8ff78;
+      padding: 16px; border-radius: 8px;
+      white-space: pre-wrap; max-height: 240px; overflow-y: auto;
+      margin-top: 16px; display: none;
+    }
+
+    .badge {
+      background: var(--yellow); color: var(--dark);
+      border: 1.5px solid var(--border); border-radius: 4px;
+      padding: 2px 8px; font-size: 0.78rem; font-weight: 700;
+    }
+    .howto {
+      background: #fffbe6; border: 2px dashed #e6c200;
+      border-radius: 10px; padding: 16px; margin-top: 16px;
+      font-size: 0.88rem; color: #555;
+    }
+    .howto ol { padding-left: 20px; margin-top: 8px; }
+    .howto li { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+<div class="admin-header">
+  <h1>✏️ Shriraam's Comics — Admin</h1>
+  <a href="index.html" target="_blank">View Site ↗</a>
+</div>
+
+<div class="admin-body">
+
+  <!-- ABOUT SECTION -->
+  <div class="card">
+    <h2 class="card-title">📝 Edit Profile &amp; About Text</h2>
+    <label>Display Name</label>
+    <input type="text" id="f-name" placeholder="e.g. Shriraam" />
+    <label>Tagline (shown under name)</label>
+    <input type="text" id="f-tagline" placeholder="e.g. Comic Artist · Age 10" />
+    <label>Hero Quote</label>
+    <input type="text" id="f-heroline" placeholder="e.g. I draw comics. Every story starts with a pencil." />
+    <label>About Me paragraph</label>
+    <textarea id="f-about" rows="4" placeholder="Write a little about yourself..."></textarea>
+    <button class="btn btn-yellow" onclick="saveProfile()">💾 Save Profile</button>
+  </div>
+
+  <!-- ADD COMIC -->
+  <div class="card">
+    <h2 class="card-title">➕ Add a New Comic</h2>
+
+    <label>Comic Title</label>
+    <input type="text" id="f-title" placeholder="e.g. The Dragon's Cave" />
+    <label>Description</label>
+    <textarea id="f-desc" rows="3" placeholder="What is this comic about?"></textarea>
+    <label>Date (e.g. June 2026)</label>
+    <input type="text" id="f-date" placeholder="June 2026" />
+
+    <label>Comic Image</label>
+    <div class="howto">
+      <strong>How to add your comic image:</strong>
+      <ol>
+        <li>Scan or photograph your comic drawing</li>
+        <li>Copy the image file into the <code>assets/comics/</code> folder</li>
+        <li>Type the filename below (e.g. <code>dragon-cave.jpg</code>)</li>
+      </ol>
+    </div>
+    <input type="text" id="f-imgname" placeholder="filename.jpg" style="margin-top:12px" />
+
+    <button class="btn btn-green" onclick="addComic()" style="margin-top:4px">✅ Add Comic</button>
+  </div>
+
+  <!-- MANAGE COMICS -->
+  <div class="card">
+    <h2 class="card-title">🗂️ My Comics <span class="badge" id="comic-count">0</span></h2>
+    <div id="comics-list"><!-- populated by JS --></div>
+  </div>
+
+  <!-- PUBLISH -->
+  <div class="card">
+    <h2 class="card-title">🚀 Publish to Website</h2>
+    <p style="color:#555; margin-bottom:16px">
+      When you're happy with your changes, export the updated <strong>data.js</strong> file, replace the one in your folder, then push to GitHub to publish.
+    </p>
+    <button class="btn btn-dark" onclick="exportData()">📦 Export data.js</button>
+    <div id="export-output"></div>
+    <div class="howto" style="margin-top:16px">
+      <strong>Publishing steps:</strong>
+      <ol>
+        <li>Click <strong>Export data.js</strong> above and copy the code</li>
+        <li>Open the <code>data.js</code> file in your folder and replace everything with the copied code</li>
+        <li>Run in Terminal: <code>cd ~/shriraam-comics &amp;&amp; git add -A &amp;&amp; git commit -m "new comic" &amp;&amp; git push</code></li>
+        <li>Your site updates at <strong>Shriraam.github.io</strong> in ~60 seconds ✅</li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+// ── Data management ──────────────────────────
+
+function loadData() {
+  const saved = localStorage.getItem('shriraam_comics_data');
+  return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(SITE_DATA));
+}
+function saveData(d) {
+  localStorage.setItem('shriraam_comics_data', JSON.stringify(d));
+}
+
+// ── Init ─────────────────────────────────────
+
+let data = loadData();
+
+function init() {
+  document.getElementById('f-name').value     = data.name     || '';
+  document.getElementById('f-tagline').value  = data.tagline  || '';
+  document.getElementById('f-heroline').value = data.heroLine || '';
+  document.getElementById('f-about').value    = data.about    || '';
+  renderComicsList();
+}
+
+// ── Profile ───────────────────────────────────
+
+function saveProfile() {
+  data.name     = document.getElementById('f-name').value.trim();
+  data.tagline  = document.getElementById('f-tagline').value.trim();
+  data.heroLine = document.getElementById('f-heroline').value.trim();
+  data.about    = document.getElementById('f-about').value.trim();
+  saveData(data);
+  toast('Profile saved! ✅');
+}
+
+// ── Comics ────────────────────────────────────
+
+function addComic() {
+  const title = document.getElementById('f-title').value.trim();
+  const desc  = document.getElementById('f-desc').value.trim();
+  const date  = document.getElementById('f-date').value.trim();
+  const img   = document.getElementById('f-imgname').value.trim();
+
+  if (!title) { toast('Please enter a title ⚠️'); return; }
+
+  const newComic = {
+    id: Date.now(),
+    title,
+    description: desc || '',
+    image: img ? `assets/comics/${img}` : '',
+    date: date || new Date().toLocaleDateString('en-US', { month:'long', year:'numeric' })
+  };
+
+  data.comics.unshift(newComic); // newest first
+  saveData(data);
+  renderComicsList();
+
+  // Clear form
+  ['f-title','f-desc','f-date','f-imgname'].forEach(id => document.getElementById(id).value = '');
+  toast('Comic added! ✅ Remember to copy the image to assets/comics/');
+}
+
+function deleteComic(id) {
+  if (!confirm('Delete this comic?')) return;
+  data.comics = data.comics.filter(c => c.id !== id);
+  saveData(data);
+  renderComicsList();
+  toast('Deleted.');
+}
+
+function renderComicsList() {
+  const list = document.getElementById('comics-list');
+  document.getElementById('comic-count').textContent = data.comics.length;
+
+  if (data.comics.length === 0) {
+    list.innerHTML = '<p style="color:#aaa;text-align:center;padding:20px">No comics yet — add one above!</p>';
+    return;
+  }
+
+  list.innerHTML = data.comics.map(c => `
+    <div class="comic-item">
+      ${c.image
+        ? `<img src="${c.image}" alt="" onerror="this.outerHTML='<div class=comic-thumb-placeholder>🖼️</div>'" />`
+        : `<div class="comic-thumb-placeholder">✏️</div>`}
+      <div class="comic-item-info">
+        <strong>${c.title}</strong>
+        <span>${c.description || '—'}</span>
+        <span style="color:#e63946;font-size:0.78rem;">${c.date}</span>
+      </div>
+      <div class="comic-item-actions">
+        <button class="btn btn-red" onclick="deleteComic(${c.id})" style="padding:6px 12px;font-size:0.8rem">🗑 Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── Export ────────────────────────────────────
+
+function exportData() {
+  const out = `// ─────────────────────────────────────────────
+//  SHRIRAAM'S COMICS — Site Content
+//  Generated by admin.html on ${new Date().toLocaleDateString()}
+// ─────────────────────────────────────────────
+
+const SITE_DATA = ${JSON.stringify(data, null, 2)};`;
+
+  const el = document.getElementById('export-output');
+  el.style.display = 'block';
+  el.textContent = out;
+
+  navigator.clipboard.writeText(out).then(() => {
+    toast('Copied to clipboard! Now paste into data.js ✅');
+  }).catch(() => {
+    toast('Copy the code above and paste into data.js');
+  });
+}
+
+// ── Toast ─────────────────────────────────────
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>

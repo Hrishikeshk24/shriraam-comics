@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shriraam's Comics</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo">✏️ Shriraam</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#comics">Comics</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">Hand-Drawn Comics</div>
+      <h1 class="hero-name" id="hero-name"></h1>
+      <p class="hero-tagline" id="hero-tagline"></p>
+      <p class="hero-line" id="hero-line"></p>
+      <a href="#comics" class="btn btn-primary">See My Comics ↓</a>
+    </div>
+    <div class="hero-panel">
+      <div class="comic-panel panel-1">💥</div>
+      <div class="comic-panel panel-2">✏️</div>
+      <div class="comic-panel panel-3">⭐</div>
+      <div class="comic-panel panel-4">🎨</div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="about-avatar-wrap">
+          <div class="avatar-circle">S</div>
+          <div class="avatar-badge">Age 10</div>
+        </div>
+        <p class="about-text" id="about-text"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMICS GALLERY -->
+  <section class="section section-alt" id="comics">
+    <div class="container">
+      <h2 class="section-title">My Comics</h2>
+      <div class="comics-grid" id="comics-grid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">✕</button>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightbox-img" />
+      <div class="lightbox-info">
+        <h3 id="lightbox-title"></h3>
+        <p id="lightbox-desc"></p>
+        <span id="lightbox-date"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section class="section" id="contact">
+    <div class="container contact-wrap">
+      <h2 class="section-title">Say Hello!</h2>
+      <p class="contact-sub">Like my comics? Have a story idea for me? I'd love to hear from you.</p>
+      <div class="social-links" id="social-links"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>✏️ All comics hand-drawn by <strong>Shriraam</strong> · <span id="footer-year"></span></p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
