@@ -7,7 +7,7 @@ const SITE_DATA = {
   "name": "Shriraam",
   "tagline": "Comic Artist · Age 10",
   "heroLine": "I draw comics. Every story starts with a pencil.",
-  "about": "Hi! I'm Shriraam and I love drawing hand-made comics and playing Sniper Elite on my Nintendo. I just finished my 4th grade. \n\n I create all my characters and stories from scratch. My comics are about adventures, funny moments, and sometimes totally made-up worlds. \n\n New comics coming all the time — check back!",
+  "about": "Hi! I'm Shriraam Hrishikesh and I love drawing hand-made comics and playing Sniper Elite on my Nintendo. I just finished my 4th grade. \n\n I create all my characters and stories from scratch. My comics are about adventures, funny moments, and sometimes totally made-up worlds. \n\n New comics coming all the time — check back!",
   "comics": [
     {
       "id": 1780308788750,
